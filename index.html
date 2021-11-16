@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animal Identification Model</title>
+</head>
+<body> <center>
+    <style>
+    html {
+        height: 100%;
+        font-size: larger;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    }
+    
+    body{
+        color: white; background-image: url('https://previews.123rf.com/images/ohishi/ohishi1309/ohishi130900114/22414899-tiger-skin-pattern.jpg'); background-size: cover; text-align:center;
+    }</style>
+    <h1>Sound Identification Model</h1>
+    <p>Click on <button style="background-image: linear-gradient(to top left, rgb(253, 207, 182), rgb(255, 173, 173)); font-size: smaller;border-color: rgba(0,0,0,0);" id="dummyDetectorButton">
+        Start the classification
+    </button> to see if an animal's nearby</p>
+    <p style="font-size: small;">Classification Result</p>
+    <div class="sound-balls" style="display: block; background-image: linear-gradient(to top left, rgb(210, 210, 255), rgb(170, 170, 255)); padding: 25px;">
+        <img src="https://th.bing.com/th/id/R.eed993c8b70fbf6c0385f888b5a5c026?rik=7M0tHsqJw9hbDg&pid=ImgRaw&r=0" height="250" width="250" style="margin-right:25px;" alt="">
+    
+       
+    </div>
+    <br>
+    <button onclick="startClassification()" style="background-image: linear-gradient(to top left, rgb(253, 207, 182), rgb(255, 173, 173)); font-size: larger; height:75px; width:250px; border-color: rgba(0,0,0,0);" id="detectorButton">
+        Start the classification
+    </button>
+</center>
+<script>
+    function startClassification() {
+        navigator.mediaDevices.getUserMedia({audio: true});
+        classifer = ml5.soundClassifier("https://teachablemachine.withgoogle.com/models/kA4F-80yW/model.json", modelReady);
+    }
+
+    function modelReady() {
+        classifer.classify(gotResults);
+    }
+
+    function gotResults(error, results) {
+        if(error){
+            console.error(error);
+        }else{
+            console.log(results);
+            randomRed = Math.floor(Math.random() * 255) + 1;
+            randomGreen = Math.floor(Math.random() * 255) + 1;
+            randomBlue = Math.floor(Math.random() * 255) + 1;
+
+            document.getElementById("result").innerHTML = "I can hear a " + results[0] + ". I am" + (results[0].confidence*100).toFixed(2) + "% sure that it is a" + results[0] + ".";
+            
+            img1 = document.getElementById("img1");
+
+
+            if(results[0].label = "Barking") {
+                img1.src = "https://i0.wp.com/www.colourbox.com/preview/5191413-59317-angry-dog-cartoon.jpg"
+            }else if(results[0].label = "Meowing"){
+               img1.src = "https://th.bing.com/th/id/OIP.ufp2T5O-qP_81D-XVmpHRgHaKT?pid=ImgDet&rs=1"
+            }else if(results[0].label = "Roaring"){
+                img1.src = "https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/9671/tiger-clipart-md.png"
+            }else{
+                img1.src = "https://th.bing.com/th/id/R.83590fe10b13c5de151362573ed0091f?rik=uwaUl9O%2fVZqfwQ&riu=http%3a%2f%2fclipartmag.com%2fimages%2fsnake-clipart-15.png&ehk=bi52z4bYryTeWdsJkO4tIk%2bgiqFCuOaBnnRVR6yDE9s%3d&risl=&pid=ImgRaw&r=0"
+            }
+
+
+        }
+</script>
+</body>
+</html>
